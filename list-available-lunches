@@ -1,0 +1,42 @@
+#! /bin/bash
+
+where_am_i="${0%/*}"
+source "${where_am_i}/common"
+
+usage() {
+    [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
+    echo -e "Usage:" >&2
+    echo -e "${0}" >&2
+    exit 1
+}
+
+menu_file=""
+menu_inventories_file=""
+cleanup() {
+  trap '' EXIT SIGINT SIGQUIT SIGABRT SIGTERM
+  [[ -z "${menu_file}" ]] || rm "${menu_file}"
+  [[ -z "${menu_inventories_file}" ]] || rm "${menu_inventories_file}"
+  exit 0
+}
+
+while getopts "h" option_name; do
+    case $option_name in
+        #f) input_file="${OPTARG:-}";;
+        #c) compact_flag="-c";;
+        h) usage;;
+    esac
+done
+
+city_id=$(call_api 'https://secure.mealpal.com/1/functions/getCurrentUser' --data-binary '{}' | jq -r '.result.city.id' )
+
+# Use a temporary file to be able to interrupt with Ctrl-C
+trap cleanup EXIT SIGQUIT SIGABRT SIGTERM
+menu_file=$(mktemp menu.XXXXXXX)
+menu_inventories_file=$(mktemp menu_inventories.XXXXXXX)
+
+call_api "https://secure.mealpal.com/api/v2/cities/${city_id}/product_offerings/lunch/menu" | jq '.features | map( { (.id): {meal_name: .meal.name, restaurant_name: .restaurant.name, restaurant_id: .restaurant.id, restaurant_address: .restaurant.address, id} }) | add' > "${menu_file}"
+
+call_api "https://secure.mealpal.com/api/v1/cities/${city_id}/product_offerings/lunch/menu_inventories"  | jq 'map({(.id): .}) | add' > "${menu_inventories_file}"
+
+# Combine menu and inventories
+jq -s '.[0] * .[1] | [.[] | select(.amount > 0)]' "${menu_file}" "${menu_inventories_file}"
