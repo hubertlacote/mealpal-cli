@@ -6,7 +6,7 @@ source "${where_am_i}/common"
 usage() {
     [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
     echo -e "Usage:" >&2
-    echo -e "${0}" >&2
+    echo -e "${script_name}" >&2
     exit 1
 }
 
