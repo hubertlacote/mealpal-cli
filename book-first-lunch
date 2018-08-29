@@ -1,0 +1,34 @@
+#! /bin/bash
+
+where_am_i="${0%/*}"
+source "${where_am_i}/common"
+
+usage() {
+    [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
+    echo -e "Usage:" >&2
+    echo -e "list-available-lunches | filter-lunches FILTERS | ${script_name} [-h]\n" >&2
+    echo -e "\t-h\t\t\tPrint this usage information" >&2
+    echo -e "\n${script_name} allows to book the first lunch specified in the JSON" \
+            "list of meals it receives from standard input."
+    exit 1
+}
+
+meal_name=""
+restaurant_name=""
+while getopts "hm:r:" option_name; do
+    case $option_name in
+        m) meal_name="${OPTARG:-}";;
+        r) restaurant_name="${OPTARG:-}";;
+        h) usage;;
+    esac
+done
+
+
+lunch_id=$(jq '.[0].id')
+
+[[ "${lunch_id}" != "null" ]] || die "No lunch found in input."
+
+call_api 'https://secure.mealpal.com/api/v2/reservations' --data-binary \
+'{"quantity":1,"schedule_id":'"${lunch_id}"\
+',"pickup_time":"12:15pm-12:30pm","source_attributes":'\
+'{"location":"kitchen_meal_view","platform":"web"}}' | jq '.'
