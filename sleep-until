@@ -1,0 +1,29 @@
+#! /bin/bash
+
+where_am_i="${0%/*}"
+source "${where_am_i}/common"
+
+usage() {
+    [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
+    echo -e "Usage:" >&2
+    echo -e "${script_name} [-h] -d [DATE]\n" >&2
+    echo -e "\t-d\tDATE\t\tSleep until date (e.g. -d '2018/08/29 17:00:00')" >&2
+    exit 1
+}
+
+date_in=""
+while getopts "hd:" option_name; do
+    case $option_name in
+        d) date_in="${OPTARG:-}";;
+        h) usage;;
+    esac
+done
+
+[[ -n "${date_in}" ]] || usage "No date specified in input."
+
+current_epoch=$(date +%s)
+target_epoch=$(date -d "${date_in}" +%s)
+
+sleep_seconds=$(( $target_epoch - $current_epoch ))
+
+sleep $sleep_seconds
