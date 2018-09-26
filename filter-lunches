@@ -9,7 +9,7 @@ usage() {
     echo -e "list-available-lunches | ${script_name} [-h] [-m MEAL_NAME] [-r RESTAURANT_NAME]\n" >&2
     echo -e "\t-h\t\t\tPrint this usage information" >&2
     echo -e "\t-m\tMEAL_NAME\tFilter using the meal name specified" >&2
-    echo -e "\t-m\tRESTAURANT_NAME\tFilter using the restaurant name specified" >&2
+    echo -e "\t-r\tRESTAURANT_NAME\tFilter using the restaurant name specified" >&2
     echo -e "\n${script_name} allows to filter a JSON list of meals returned\n"\
             "by list-available-lunches. It reads from standard input."
     exit 1
