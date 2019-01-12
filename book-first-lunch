@@ -13,12 +13,8 @@ usage() {
     exit 1
 }
 
-meal_name=""
-restaurant_name=""
-while getopts "hm:r:" option_name; do
+while getopts "h" option_name; do
     case $option_name in
-        m) meal_name="${OPTARG:-}";;
-        r) restaurant_name="${OPTARG:-}";;
         h) usage;;
     esac
 done
