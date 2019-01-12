@@ -1,0 +1,99 @@
+#! /bin/bash
+
+##
+#/
+#/ Sample script that shows how to use mealpal-cli.
+#/ Can be interrupted safely and executed in the middle of a schedule.
+#/
+#/ Instructions:
+#/
+#/ - Replace YOUR_COOKIE_FROM_CHROME_HERE with your mealpal session cookie.
+#/ - Edit the meals you want to book and execute this script every two weeks
+#/   by specifying with -s, the date of the first Monday of the schedule
+#/   specified in the script.
+#/
+#/ Usage:
+#/
+#/ @PROGRAM@ -s <start_date>
+#/
+#/      -s <start_date> Date of the first Monday to start booking lunches
+#/
+#/ Example:
+#/
+#/     # Exact starting date
+#/     @PROGRAM@ -s "2019-01-21"
+#/
+#/     # Monday in 2 weeks (Next Monday + 1 week):
+#/     @PROGRAM@ -s "Monday + 1 week"
+#/
+#/
+
+export mealpal_session="YOUR_COOKIE_FROM_CHROME_HERE"
+
+where_am_i="${0%/*}"
+source "${where_am_i}/common"
+
+start_date=""
+while getopts "s:h" option_name; do
+    case $option_name in
+        s) start_date="${OPTARG:-}";;
+        h) usage;;
+    esac
+done
+
+[[ -n "${start_date}" ]] ||
+    usage "Please specify the start date with -s"
+
+# Assuming start date is a Monday
+[[ $(date +%A -d "${start_date}") = "Monday" ]] ||
+    die "Start date must be a Monday"
+
+# Tuesday
+book_lunch "${start_date} + 1 day" "Chilango - Monument" "Low Carb Box" ||
+    book_lunch "${start_date} + 1 day" "Garbanzo's - Monument" "Falafel" ||
+    book_lunch "${start_date} + 1 day" "Coco Di Mama - Monument" "Beef Lasagne" ||
+    book_lunch "${start_date} + 1 day" "K10 - Minster Court" "Prawn Katsu" ||
+    book_lunch "${start_date} + 1 day" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    warn "No lunch booked for Tuesday"
+
+# Wednesday
+book_lunch "${start_date} + 2 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    book_lunch "${start_date} + 2 days" "Garbanzo's - Monument" "Schnitzel" ||
+    book_lunch "${start_date} + 2 days" "K10 - Minster Court" "Medium Salmon Set" ||
+    warn "No lunch booked for Wednesday"
+
+# Thursday
+book_lunch "${start_date} + 3 days" "Garbanzo's - Monument" "Schnitzel" ||
+    book_lunch "${start_date} + 3 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    book_lunch "${start_date} + 3 days" "K10 - Minster Court" "Prawn Katsu" ||
+    warn "No lunch booked for Thursday"
+
+# Friday
+book_lunch "${start_date} + 4 days" "Garbanzo's - Monument" "Falafel" ||
+    warn "No lunch booked for Friday"
+
+# Monday
+book_lunch "${start_date} + 7 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    book_lunch "${start_date} + 7 days" "Garbanzo's - Monument" "Schnitzel" ||
+    book_lunch "${start_date} + 7 days" "K10 - Minster Court" "Chicken Katsu Curry" ||
+    warn "No lunch booked for Monday"
+
+# Tuesday
+book_lunch "${start_date} + 8 days" "Garbanzo's - Monument" "Falafel" ||
+    book_lunch "${start_date} + 8 days" "Coco Di Mama - Monument" "Beef Lasagne" ||
+    book_lunch "${start_date} + 8 days" "Chilango - Monument" "Low Carb Box" ||
+    book_lunch "${start_date} + 8 days" "K10 - Minster Court" "Prawn Katsu" ||
+    book_lunch "${start_date} + 8 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    warn "No lunch booked for Tuesday"
+
+# Wednesday
+book_lunch "${start_date} + 9 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    book_lunch "${start_date} + 9 days" "Garbanzo's - Monument" "Schnitzel" ||
+    book_lunch "${start_date} + 9 days" "K10 - Minster Court" "Medium Salmon Set" ||
+    warn "No lunch booked for Wednesday"
+
+# Thursday
+book_lunch "${start_date} + 10 days" "Garbanzo's - Monument" "Schnitzel" ||
+    book_lunch "${start_date} + 10 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    book_lunch "${start_date} + 10 days" "K10 - Minster Court" "Prawn Katsu" ||
+    warn "No lunch booked for Thursday"

@@ -14,6 +14,30 @@ You need to specify your MealPal cookie **_mealpal_session** using `mealpal_sess
 
 ## Usage
 
+A sample script is provided: [book-my-lunches](book-my-lunches):
+
 ```bash
-./sleep-until -d "2018/09/26 17:10:00" && mealpal_session="YOUR_COOKIE_FROM_CHROME" ./list-available-lunches | ./filter-lunches -r "Restaurant name" | ./book-first-lunch
+# Edit the script with your mealpal session and the lunches that you want to book every 2 weeks, and execute
+# it every two weeks on Sunday, by specifying the date of the first Monday of the schedule.
+vi book-my-lunches
+
+# Edit the script book-my-lunches and then execute:
+./book-my-lunches -s "2019-01-21"
+
+# Or specify another date, e.g. Monday in 2 weeks (Next Monday + 1 week):
+./book-my-lunches -s "Monday + 1 week"
+```
+
+Or feel free to use directly the command line tools:
+
+```bash
+# Print usage
+./list-all-lunches -h
+./list-available-lunches -h
+./filter-lunches -h
+./book-first-lunch -h
+./sleep-until -h
+
+# One liner to book a lunch
+./sleep-until -d "2018/09/26 17:10:00" && mealpal_session="YOUR_COOKIE_FROM_CHROME" ./list-available-lunches | ./filter-lunches -r "Restaurant name" -m "Meal name" | ./book-first-lunch
 ```
