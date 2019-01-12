@@ -1,14 +1,13 @@
 #! /bin/bash
 
+##
+#/
+#/ @PROGRAM@ can be used to list available lunches.
+#/
+##
+
 where_am_i="${0%/*}"
 source "${where_am_i}/common"
-
-usage() {
-    [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
-    echo -e "Usage:" >&2
-    echo -e "${script_name}" >&2
-    exit 1
-}
 
 menu_file=""
 menu_inventories_file=""
@@ -21,8 +20,6 @@ cleanup() {
 
 while getopts "h" option_name; do
     case $option_name in
-        #f) input_file="${OPTARG:-}";;
-        #c) compact_flag="-c";;
         h) usage;;
     esac
 done

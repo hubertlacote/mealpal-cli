@@ -1,19 +1,26 @@
 #! /bin/bash
 
+##
+#/
+#/ @PROGRAM@ allows to filter a JSON list of meals returned by list-available-lunches.
+#/
+#/ Usage:
+#/
+#/ ./list-available-lunches | @PROGRAM@ [OPTIONS]
+#/
+#/ OPTIONS:
+#/
+#/     -m <meal_name>       Filter using the meal name specified.
+#/     -r <restaurant_name> Filter using the restaurant name specified.
+#/
+#/ Example:
+#/
+#/     ./list-available-lunches | ./filter-lunches -r "Assenheims 56 - Great Tower St."
+#/
+##
+
 where_am_i="${0%/*}"
 source "${where_am_i}/common"
-
-usage() {
-    [[ -z ${1:-} ]] || echo -e "${script_name} - Error: ${1}\n"
-    echo -e "Usage:" >&2
-    echo -e "list-available-lunches | ${script_name} [-h] [-m MEAL_NAME] [-r RESTAURANT_NAME]\n" >&2
-    echo -e "\t-h\t\t\tPrint this usage information" >&2
-    echo -e "\t-m\tMEAL_NAME\tFilter using the meal name specified" >&2
-    echo -e "\t-r\tRESTAURANT_NAME\tFilter using the restaurant name specified" >&2
-    echo -e "\n${script_name} allows to filter a JSON list of meals returned\n"\
-            "by list-available-lunches. It reads from standard input."
-    exit 1
-}
 
 jq_filters=""
 addFilter() {
