@@ -1,6 +1,6 @@
 # mealpal-cli
 
-**A set of command-line to make it possible to automate MealPal lunch booking.**
+**A set of command-line tools to make it possible to automate MealPal lunch booking.**
 
 ## Why ([![start with why](https://img.shields.io/badge/start%20with-why%3F-brightgreen.svg?style=flat)](http://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action))
 
@@ -8,16 +8,19 @@ The most popular places quickly sell out, so you have to book exactly at 5pm.
 
 ## Configuration
 
-You need to find your MealPal cookie **_mealpal_session**:
+mealpal-cli uses the un-documented public REST API used internally by MealPal Website.
+
+In order to use these tools, you need to find your MealPal cookie **_mealpal_session**:
 
 - On Chrome, you can find it here: [chrome://settings/cookies/detail?site=secure.mealpal.com](chrome://settings/cookies/detail?site=secure.mealpal.com), or by pressing F12 and going to Application (tab) - Cookies (sidebar).
 
 ## Requirements
 
+To parse JSON returned by the REST API, the tools use the command-line `jq`:
+
 - Instructions for Ubuntu:
 
 ```bash
-# Install jq (Command-line JSON processor)
 sudo apt install jq
 ```
 
