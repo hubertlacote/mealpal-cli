@@ -2,7 +2,11 @@
 
 ##
 #/
-#/ Sample script that shows how to use mealpal-cli.
+#/ Sample script that shows how to use mealpal-cli to book a schedule of
+#/ lunches specified in the script, e.g.:
+#/ - on Monday, book Meal A or Meal B if Meal A is not available,
+#/ - on Wednesday, book Meal C or Meal B or Meal D...
+#/
 #/ Can be interrupted safely and executed in the middle of a schedule.
 #/
 #/ Instructions:
@@ -14,34 +18,37 @@
 #/
 #/ Usage:
 #/
-#/ @PROGRAM@ -s <start_date>
+#/ @PROGRAM@ -c <mealpal_cookie> -s <start_date>
 #/
-#/      -s <start_date> Date of the first Monday to start booking lunches
+#/      -c <mealpal_cookie>     MealPal session cookie (see README.md)
+#/      -s <start_date>         Date of the first Monday of the schedule
 #/
 #/ Example:
 #/
 #/     # Exact starting date
-#/     @PROGRAM@ -s "2019-01-21"
+#/     @PROGRAM@ -c "YOUR_COOKIE_FROM_CHROME_HERE" -s "2019-01-21"
 #/
 #/     # Monday in 2 weeks (Next Monday + 1 week):
-#/     @PROGRAM@ -s "Monday + 1 week"
+#/     @PROGRAM@ -c "YOUR_COOKIE_FROM_CHROME_HERE" -s "Monday + 1 week"
 #/
 #/
-
-export mealpal_session="YOUR_COOKIE_FROM_CHROME_HERE"
 
 where_am_i="${0%/*}"
 source "${where_am_i}/tools/common"
 
+mealpal_session=""
 start_date=""
-while getopts "s:h" option_name; do
+while getopts "c:s:h" option_name; do
     case $option_name in
+        c) mealpal_session="${OPTARG:-}";;
         s) start_date="${OPTARG:-}";;
         h) usage;;
     esac
 done
 
-[[ -n "${start_date}" ]] ||
+[[ -n "${mealpal_session:-}" ]] ||
+    usage "Please specify the MealPal session cookie -c"
+[[ -n "${start_date:-}" ]] ||
     usage "Please specify the start date with -s"
 
 # Assuming start date is a Monday

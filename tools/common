@@ -76,7 +76,10 @@ book_lunch() {
     readable_lunch_date=$(date "+%A %d/%m/%Y" -d "${lunch_date}")
 
     if is_past_date "${lunch_date} ${booking_closing_time}"; then
-        info "Too late to book lunch on ${readable_lunch_date}"
+        local lunch_date_formatted
+        lunch_date_formatted=$(format_date "${lunch_date}")
+        info "Too late to book lunch on ${readable_lunch_date}:"
+        info "booking closed at ${booking_closing_time} on ${lunch_date_formatted}"
         return 0
     fi
 
