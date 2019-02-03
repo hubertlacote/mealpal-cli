@@ -33,4 +33,6 @@ target_epoch=$(date -d "${date_in}" +%s)
 
 sleep_seconds=$(( $target_epoch - $current_epoch ))
 
-sleep $sleep_seconds
+if [[ ${sleep_seconds} -gt 0 ]]; then
+    sleep ${sleep_seconds}
+fi
