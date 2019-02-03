@@ -1,0 +1,24 @@
+#! /bin/bash
+
+##
+#/
+#/ @PROGRAM@ can be used to list all lunches.
+#/
+##
+
+where_am_i="${0%/*}"
+source "${where_am_i}/common"
+
+while getopts "h" option_name; do
+    case $option_name in
+        h) usage;;
+    esac
+done
+
+city_id=$(call_api 'https://secure.mealpal.com/1/functions/getCurrentUser' --data-binary '{}' | \
+    jq -r '.result.city.id') ||
+    die "Failed to get the city of the user"
+
+call_api "https://secure.mealpal.com/api/v2/cities/${city_id}/product_offerings/lunch/menu" | \
+    jq '.features | map( { (.id): {meal_name: .meal.name, restaurant_name: .restaurant.name, restaurant_id: .restaurant.id, restaurant_address: .restaurant.address, id} }) | add' ||
+    die "Failed to fetch the menu"
