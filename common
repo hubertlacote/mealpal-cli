@@ -2,6 +2,7 @@
 
 set -u
 set -e
+set -o pipefail
 
 script_name=${0##*/}
 

@@ -15,7 +15,7 @@ cleanup() {
   trap '' EXIT SIGINT SIGQUIT SIGABRT SIGTERM
   [[ -z "${menu_file}" ]] || rm "${menu_file}"
   [[ -z "${menu_inventories_file}" ]] || rm "${menu_inventories_file}"
-  exit 0
+  exit "${1}"
 }
 
 while getopts "h" option_name; do
@@ -24,16 +24,26 @@ while getopts "h" option_name; do
     esac
 done
 
-city_id=$(call_api 'https://secure.mealpal.com/1/functions/getCurrentUser' --data-binary '{}' | jq -r '.result.city.id' )
+city_id=$(call_api 'https://secure.mealpal.com/1/functions/getCurrentUser' --data-binary '{}' | \
+    jq -r '.result.city.id') ||
+    die "Failed to get the city of the user"
 
 # Use a temporary file to be able to interrupt with Ctrl-C
-trap cleanup EXIT SIGQUIT SIGABRT SIGTERM
+trap 'cleanup $?' EXIT SIGQUIT SIGABRT SIGTERM
 menu_file=$(mktemp menu.XXXXXXX)
 menu_inventories_file=$(mktemp menu_inventories.XXXXXXX)
 
-call_api "https://secure.mealpal.com/api/v2/cities/${city_id}/product_offerings/lunch/menu" | jq '.features | map( { (.id): {meal_name: .meal.name, restaurant_name: .restaurant.name, restaurant_id: .restaurant.id, restaurant_address: .restaurant.address, id} }) | add' > "${menu_file}"
+call_api "https://secure.mealpal.com/api/v2/cities/${city_id}/product_offerings/lunch/menu" | \
+    jq '.features | map( { (.id): {meal_name: .meal.name, restaurant_name: .restaurant.name, restaurant_id: .restaurant.id, restaurant_address: .restaurant.address, id} }) | add' > "${menu_file}" ||
+    die "Failed to fetch the menu"
 
-call_api "https://secure.mealpal.com/api/v1/cities/${city_id}/product_offerings/lunch/menu_inventories"  | jq 'map({(.id): .}) | add' > "${menu_inventories_file}"
+call_api "https://secure.mealpal.com/api/v1/cities/${city_id}/product_offerings/lunch/menu_inventories" | \
+    jq 'map({(.id): .}) | add' > "${menu_inventories_file}" ||
+    die "Failed to fetch the quantities available for every lunch"
 
 # Combine menu and inventories
-jq -s '.[0] * .[1] | [.[] | select(.amount > 0)]' "${menu_file}" "${menu_inventories_file}"
+jq -s '.[0] * .[1] | [.[] | select(.amount > 0)]' "${menu_file}" "${menu_inventories_file}" || {
+    cat "${menu_file}" >&2
+    cat "${menu_inventories_file}" >&2
+    die "Failed to get the available lunches"
+}

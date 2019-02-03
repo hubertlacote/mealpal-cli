@@ -20,12 +20,14 @@ while getopts "h" option_name; do
     esac
 done
 
+lunch_id=$(jq '.[0].id') ||
+    die "No lunch passed in input"
 
-lunch_id=$(jq '.[0].id')
-
-[[ "${lunch_id}" != "null" ]] || die "No lunch found in input."
+[[ "${lunch_id}" != "null" ]] ||
+    die "No lunch passed in input."
 
 call_api 'https://secure.mealpal.com/api/v2/reservations' --data-binary \
 '{"quantity":1,"schedule_id":'"${lunch_id}"\
 ',"pickup_time":"12:15pm-12:30pm","source_attributes":'\
-'{"location":"kitchen_meal_view","platform":"web"}}' | jq '.'
+'{"location":"kitchen_meal_view","platform":"web"}}' | jq '.' ||
+    die "Failed to book lunch '${lunch_id}'"

@@ -50,4 +50,4 @@ result=$(jq "[.[] | select(${jq_filters})]")
 
 [[ -n "${result}" ]] || die "Meal specified is not available."
 
-echo "${result}"
+echo "${result}" | jq '.'
