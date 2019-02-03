@@ -8,9 +8,26 @@ The most popular places quickly sell out, so you have to book exactly at 5pm.
 
 ## Configuration
 
-You need to specify your MealPal cookie **_mealpal_session** using `mealpal_session` environment variable:
+You need to find your MealPal cookie **_mealpal_session**:
 
 - On Chrome, you can find it here: [chrome://settings/cookies/detail?site=secure.mealpal.com](chrome://settings/cookies/detail?site=secure.mealpal.com), or by pressing F12 and going to Application (tab) - Cookies (sidebar).
+
+## Requirements
+
+- Instructions for Ubuntu:
+
+```bash
+# Install jq (Command-line JSON processor)
+sudo apt install jq
+```
+
+- Instructions for Mac OSX:
+
+Using Homebrew (For details about installing homebrew, see http://brew.sh):
+
+```bash
+brew install jq
+```
 
 ## Usage
 
@@ -41,5 +58,5 @@ Or feel free to use directly the command line tools:
 ./tools/sleep-until -h
 
 # One liner to book a lunch
-./tools/sleep-until -d "2018/09/26 17:10:00" && mealpal_session="YOUR_COOKIE_FROM_CHROME" ./tools/list-available-lunches | ./tools/filter-lunches -r "Restaurant name" -m "Meal name" | ./tools/book-first-lunch
+./tools/sleep-until -d "2018/09/26 17:10:00" && MEALPAL_SESSION="YOUR_COOKIE_FROM_CHROME" ./tools/list-available-lunches | ./tools/filter-lunches -r "Restaurant name" -m "Meal name" | ./tools/book-first-lunch
 ```

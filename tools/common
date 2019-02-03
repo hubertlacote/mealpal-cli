@@ -106,5 +106,5 @@ book_lunch() {
 }
 
 call_api() {
-  curl -s $@ -H "origin: https://secure.mealpal.com" -H "accept-encoding: gzip, deflate, br" -H "accept-language: en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7" -H "pragma: no-cache" -H "user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" -H "content-type: application/json;charset=UTF-8" -H "accept: application/json" -H "cache-control: no-cache" -H "authority: secure.mealpal.com" -H "referer: https://secure.mealpal.com/lunch" -H "dnt: 1" -H "cookie: _mealpal_session=${mealpal_session};" --compressed
+  curl -s $@ -H "origin: https://secure.mealpal.com" -H "accept-encoding: gzip, deflate, br" -H "accept-language: en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7" -H "pragma: no-cache" -H "user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" -H "content-type: application/json;charset=UTF-8" -H "accept: application/json" -H "cache-control: no-cache" -H "authority: secure.mealpal.com" -H "referer: https://secure.mealpal.com/lunch" -H "dnt: 1" -H "cookie: _mealpal_session=${MEALPAL_SESSION};" --compressed
 }

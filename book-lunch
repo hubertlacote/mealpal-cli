@@ -30,13 +30,13 @@
 where_am_i="${0%/*}"
 source "${where_am_i}/tools/common"
 
-mealpal_session=""
+MEALPAL_SESSION=""
 lunch_date=""
 restaurant_name=""
 meal_name=""
 while getopts "c:d:r:m:h" option_name; do
     case $option_name in
-        c) mealpal_session="${OPTARG:-}";;
+        c) MEALPAL_SESSION="${OPTARG:-}";;
         d) lunch_date="${OPTARG:-}";;
         r) restaurant_name="${OPTARG:-}";;
         m) meal_name="${OPTARG:-}";;
@@ -44,7 +44,7 @@ while getopts "c:d:r:m:h" option_name; do
     esac
 done
 
-[[ -n "${mealpal_session:-}" ]] ||
+[[ -n "${MEALPAL_SESSION:-}" ]] ||
     usage "Please specify the MealPal session cookie -c"
 [[ -n "${lunch_date:-}" ]] ||
     usage "Please specify the date of the lunch to book with -d"

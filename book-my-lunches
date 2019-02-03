@@ -36,17 +36,17 @@
 where_am_i="${0%/*}"
 source "${where_am_i}/tools/common"
 
-mealpal_session=""
+MEALPAL_SESSION=""
 start_date=""
 while getopts "c:s:h" option_name; do
     case $option_name in
-        c) mealpal_session="${OPTARG:-}";;
+        c) MEALPAL_SESSION="${OPTARG:-}";;
         s) start_date="${OPTARG:-}";;
         h) usage;;
     esac
 done
 
-[[ -n "${mealpal_session:-}" ]] ||
+[[ -n "${MEALPAL_SESSION:-}" ]] ||
     usage "Please specify the MealPal session cookie -c"
 [[ -n "${start_date:-}" ]] ||
     usage "Please specify the start date with -s"
