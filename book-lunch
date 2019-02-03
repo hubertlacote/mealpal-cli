@@ -1,0 +1,54 @@
+#! /bin/bash
+
+##
+#/
+#/ Books a lunch on MealPal at the specified lunch date.
+#/
+#/ If it is too late to book for the lunch date specified, exits without error.
+#/ Otherwise, waits for the booking opening time and books the meal specified
+#/ if it is available.
+#/
+#/ Usage:
+#/
+#/ @PROGRAM@ -c <mealpal_cookie> -d <lunch_date> -r <restaurant_name> -m <meal_name>
+#/
+#/      -c <mealpal_cookie>     MealPal session cookie (see README.md)
+#/      -d <lunch_date>         Date of the lunch (any format accepted by the command 'date')
+#/      -r <restaurant_name>    Name of the restaurant (regular expression accepted)
+#/      -m <meal_name>          Name of the meal (regular expression accepted)
+#/
+#/ Examples:
+#/
+#/     # Book the first meal returned by MealPal that contains "Chicken" on 21/01/2019
+#/     @PROGRAM@ -c "YOUR_COOKIE_FROM_CHROME_HERE" -d "2019-01-21" -m "Chicken"
+#/
+#/     # Book chicken from Chilango tomorrow
+#/     @PROGRAM@ -c "YOUR_COOKIE_FROM_CHROME_HERE" -d "Tomorrow" -r "Chilango" -m "Chicken"
+#/
+#/
+
+where_am_i="${0%/*}"
+source "${where_am_i}/tools/common"
+
+mealpal_session=""
+lunch_date=""
+restaurant_name=""
+meal_name=""
+while getopts "c:d:r:m:h" option_name; do
+    case $option_name in
+        c) mealpal_session="${OPTARG:-}";;
+        d) lunch_date="${OPTARG:-}";;
+        r) restaurant_name="${OPTARG:-}";;
+        m) meal_name="${OPTARG:-}";;
+        h) usage;;
+    esac
+done
+
+[[ -n "${mealpal_session:-}" ]] ||
+    usage "Please specify the MealPal session cookie -c"
+[[ -n "${lunch_date:-}" ]] ||
+    usage "Please specify the date of the lunch to book with -d"
+[[ -n "${restaurant_name:-}" || -n "${meal_name:-}" ]] ||
+    usage "Please specify the name of the restaurant and/or the name of the meal to book"
+
+book_lunch "${lunch_date}" "${restaurant_name:-}" "${meal_name:-}"
