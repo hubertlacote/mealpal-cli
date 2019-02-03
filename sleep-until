@@ -1,15 +1,22 @@
 #! /bin/bash
 
+##
+#/
+#/ Really basic alternative to cron jobs to make it easier to use for anyone.
+#/ If the date specified is in the past, returns directly.
+#/ Another alternative would be to use the command 'at':
+#/   echo "ps aux > /tmp/file" | at 08:58
+#/
+#/ Usage:
+#/
+#/ @PROGRAM@ -d <date>
+#/
+#/      -d <date> Sleep until date (e.g. -d '2018/08/29 17:00:00')
+#/
+##
+
 where_am_i="${0%/*}"
 source "${where_am_i}/common"
-
-usage() {
-    [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
-    echo -e "Usage:" >&2
-    echo -e "${script_name} [-h] -d [DATE]\n" >&2
-    echo -e "\t-d\tDATE\t\tSleep until date (e.g. -d '2018/08/29 17:00:00')" >&2
-    exit 1
-}
 
 date_in=""
 while getopts "hd:" option_name; do

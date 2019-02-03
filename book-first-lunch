@@ -1,17 +1,18 @@
 #! /bin/bash
 
+##
+#/
+#/ @PROGRAM@ can be used to book the first lunch appearing in a JSON
+#/ list of meals returned by list-available-lunches.
+#/
+#/ Usage:
+#/
+#/ list-available-lunches | filter-lunches FILTERS | @PROGRAM@
+#/
+##
+
 where_am_i="${0%/*}"
 source "${where_am_i}/common"
-
-usage() {
-    [[ -z ${1:-} ]] || echo -e "Error: ${1}\n"
-    echo -e "Usage:" >&2
-    echo -e "list-available-lunches | filter-lunches FILTERS | ${script_name} [-h]\n" >&2
-    echo -e "\t-h\t\t\tPrint this usage information" >&2
-    echo -e "\n${script_name} allows to book the first lunch specified in the JSON" \
-            "list of meals it receives from standard input."
-    exit 1
-}
 
 while getopts "h" option_name; do
     case $option_name in
