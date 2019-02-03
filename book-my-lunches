@@ -31,7 +31,7 @@
 export mealpal_session="YOUR_COOKIE_FROM_CHROME_HERE"
 
 where_am_i="${0%/*}"
-source "${where_am_i}/common"
+source "${where_am_i}/tools/common"
 
 start_date=""
 while getopts "s:h" option_name; do

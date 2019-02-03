@@ -32,12 +32,12 @@ Or feel free to use directly the command line tools:
 
 ```bash
 # Print usage
-./list-all-lunches -h
-./list-available-lunches -h
-./filter-lunches -h
-./book-first-lunch -h
-./sleep-until -h
+./tools/list-all-lunches -h
+./tools/list-available-lunches -h
+./tools/filter-lunches -h
+./tools/book-first-lunch -h
+./tools/sleep-until -h
 
 # One liner to book a lunch
-./sleep-until -d "2018/09/26 17:10:00" && mealpal_session="YOUR_COOKIE_FROM_CHROME" ./list-available-lunches | ./filter-lunches -r "Restaurant name" -m "Meal name" | ./book-first-lunch
+./tools/sleep-until -d "2018/09/26 17:10:00" && mealpal_session="YOUR_COOKIE_FROM_CHROME" ./tools/list-available-lunches | ./tools/filter-lunches -r "Restaurant name" -m "Meal name" | ./tools/book-first-lunch
 ```

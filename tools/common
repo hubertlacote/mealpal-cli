@@ -86,14 +86,14 @@ book_lunch() {
     if is_future_date "${booking_opening_date} ${booking_opening_time}"; then
         local booking_datetime
         booking_datetime=$(date "+%Y/%m/%d %H:%M:%S" -d "${booking_opening_date} ${booking_time}")
-        info "Waiting until ${readable_booking_datetime}..."
-        "${where_am_i}"/sleep-until -d "${booking_datetime}"
+        info "Waiting until booking opens - ${readable_booking_datetime}..."
+        "${where_am_i}"/tools/sleep-until -d "${booking_datetime}"
     fi
 
     (
-        "${where_am_i}"/list-available-lunches | \
-            "${where_am_i}"/filter-lunches -r "${restaurant}" -m "${meal}" | \
-                "${where_am_i}"/book-first-lunch
+        "${where_am_i}"/tools/list-available-lunches | \
+            "${where_am_i}"/tools/filter-lunches -r "${restaurant}" -m "${meal}" | \
+                "${where_am_i}"/tools/book-first-lunch
     ) || {
         info "Failed to book lunch"
         return 1
