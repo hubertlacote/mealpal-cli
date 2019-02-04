@@ -26,6 +26,8 @@ lunch_id=$(jq '.[0].id') ||
 [[ "${lunch_id}" != "null" ]] ||
     die "No lunch passed in input."
 
+info "This meal is available, booking it..."
+
 call_api 'https://secure.mealpal.com/api/v2/reservations' --data-binary \
 '{"quantity":1,"schedule_id":'"${lunch_id}"\
 ',"pickup_time":"12:15pm-12:30pm","source_attributes":'\

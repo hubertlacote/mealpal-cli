@@ -36,7 +36,7 @@
 where_am_i="${0%/*}"
 source "${where_am_i}/tools/common"
 
-MEALPAL_SESSION=""
+export MEALPAL_SESSION=""
 start_date=""
 while getopts "c:s:h" option_name; do
     case $option_name in

@@ -12,11 +12,11 @@ BLUE='\033[0;34m'
 NO_COLOUR='\033[0m'
 
 info() {
-    echo -e "${BLUE}${script_name}: Info: ${1:-}${NO_COLOUR}"
+    echo -e "${BLUE}${script_name}: Info: ${1:-}${NO_COLOUR}" >&2
 }
 
 warn() {
-    echo -e "${YELLOW}${script_name}: Warning: ${1:-}${NO_COLOUR}"
+    echo -e "${YELLOW}${script_name}: Warning: ${1:-}${NO_COLOUR}" >&2
 }
 
 error() {
@@ -63,9 +63,9 @@ book_lunch() {
     local restaurant="${2}"
     local meal="${3}"
 
-    local booking_opening_time="17:00:00"
-    local booking_time="17:01:00"
-    local booking_closing_time="10:30:00"
+    local booking_opening_time="17:00:00 GMT"
+    local booking_time="17:01:00 GMT"
+    local booking_closing_time="10:30:00 GMT"
 
     local booking_opening_date
     local readable_booking_datetime
@@ -83,7 +83,7 @@ book_lunch() {
         return 0
     fi
 
-    echo ""
+    echo "" >&2
     info "Booking lunch '${meal}' at '${restaurant}' on ${readable_lunch_date}"
 
     if is_future_date "${booking_opening_date} ${booking_opening_time}"; then
