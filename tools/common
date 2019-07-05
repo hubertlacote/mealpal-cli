@@ -67,9 +67,9 @@ book_lunch() {
     local restaurant="${2}"
     local meal="${3}"
 
-    local booking_opening_time="17:00:00 GMT"
-    local booking_time="17:01:00 GMT"
-    local booking_closing_time="10:30:00 GMT"
+    local booking_opening_time="17:00:00"
+    local booking_time="17:00:20"
+    local booking_closing_time="10:30:00"
 
     local booking_opening_date
     local readable_booking_datetime
@@ -77,6 +77,7 @@ book_lunch() {
 
     booking_opening_date=$(format_date "${lunch_date} - 1 day")
     readable_booking_datetime=$(date "+%A %d/%m/%Y %H:%M:%S" -d "${booking_opening_date} ${booking_time}")
+    writable_lunch_date=$(date "+%Y_%m_%d-%A" -d "${lunch_date}")
     readable_lunch_date=$(date "+%A %d/%m/%Y" -d "${lunch_date}")
 
     if is_past_date "${lunch_date} ${booking_closing_time}"; then
@@ -96,6 +97,9 @@ book_lunch() {
         info "Waiting until booking opens - ${readable_booking_datetime}..."
         "${where_am_i}"/tools/sleep-until -d "${booking_datetime}"
     fi
+
+    "${where_am_i}"/tools/list-all-lunches &> "${where_am_i}"/${writable_lunch_date}-all-lunches.log
+    "${where_am_i}"/tools/list-available-lunches &> "${where_am_i}"/${writable_lunch_date}-available-lunches.log
 
     (
         "${where_am_i}"/tools/list-available-lunches | \
