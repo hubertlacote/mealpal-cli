@@ -27,7 +27,7 @@ addFilter() {
     [[ -z "${jq_filters}" ]] || jq_filters+=" and "
     filter_name="${1}"
     filter_value="${2}"
-    jq_filters+="(.${filter_name} | match(\"${filter_value}\"))"
+    jq_filters+="((.${filter_name}//empty) | match(\"${filter_value}\"))"
 }
 
 meal_name=""
@@ -46,6 +46,7 @@ done
 
 [[ -n "${jq_filters}" ]] || usage "No filter specified."
 
+debug "jq '[.[] | select(${jq_filters})]'"
 result=$(jq "[.[] | select(${jq_filters})]")
 
 [[ -n "${result}" ]] || die "Meal specified is not available."
