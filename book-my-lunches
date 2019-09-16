@@ -56,8 +56,6 @@ done
     die "Start date must be a Monday"
 
 # Tuesday
-book_lunch "${start_date} + 1 day" "Garbanzo's - Monument" "Falafel" ||
-    warn "No lunch booked for Tuesday"
 
 # Wednesday
 book_lunch "${start_date} + 2 days" "Patty & Bun - Borough" "Robinson Burger" ||
@@ -69,14 +67,13 @@ book_lunch "${start_date} + 3 days" "Assenheims 56 - Great Tower St." "Chicken B
     warn "No lunch booked for Thursday"
 
 # Monday
-book_lunch "${start_date} + 7 days" "HOP Vietnamese - Cullum St (v)" "Chicken" ||
-    book_lunch "${start_date} + 7 days" "Garbanzo's - Monument" "Schnitzel" ||
-        book_lunch "${start_date} + 7 day" "Patty & Bun - Borough" "Burger" ||
-            warn "No lunch booked for Monday"
+book_lunch "${start_date} + 7 days" "Assenheims 56 - Great Tower St." "Chicken Box" ||
+    book_lunch "${start_date} + 7 days" "HOP Vietnamese - Cullum St (v)" "Chicken" ||
+        book_lunch "${start_date} + 7 days" "Garbanzo's - Monument" "Schnitzel" ||
+            book_lunch "${start_date} + 7 day" "Patty & Bun - Borough" "Burger" ||
+                warn "No lunch booked for Monday"
 
 # Tuesday
-book_lunch "${start_date} + 8 day" "Garbanzo's - Monument" "Falafel" ||
-    warn "No lunch booked for Tuesday"
 
 # Wednesday
 book_lunch "${start_date} + 9 days" "Patty & Bun - Borough" "Robinson Burger" ||
